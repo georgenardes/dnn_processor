@@ -1,32 +1,67 @@
-# Prerequisites
-*.d
+# Quartus-related files and directories
+output_files/
+db/
+incremental_db/
+simulation/
+.qws/
+*qws
+*.txt
+*transcript*
+**done
+**sld
 
-# Compiled Object files
-*.slo
-*.lo
-*.o
-*.obj
+# ModelSim-related files and directories
+work/
+modelsim.ini
+*.wlf
+*.mti
 
-# Precompiled Headers
-*.gch
-*.pch
+# Ignore Quartus and ModelSim project settings files (modify these as needed)
+*.qsf
+*.mpf
+*.mpfs
+*.sdc
+*.do
+*.vro
+*.vrobjects
+*.rpt
+*.summary
 
-# Compiled Dynamic libraries
-*.so
-*.dylib
-*.dll
+# Ignore Quartus and ModelSim temporary files
+*.sopcinfo
+*.jdi
+*.smsg
+*.ralf
+*.ralfidx
 
-# Fortran module files
-*.mod
-*.smod
+# Ignore Quartus and ModelSim generated programming files
+*.pof
+*.jic
+*.cdf
 
-# Compiled Static libraries
-*.lai
-*.la
-*.a
-*.lib
+# Ignore Quartus database files
+*.qdb
 
-# Executables
-*.exe
-*.out
-*.app
+# Ignore ModelSim coverage files
+*.vdb
+
+# Ignore Quartus and ModelSim log files
+*.log
+
+# Ignore Quartus and ModelSim project backups
+*.bak
+
+# Ignore Quartus and ModelSim simulation waveform files
+*.wdb
+*.wdo
+
+# Ignore Quartus and ModelSim synthesis output files
+*.syr
+*.pin
+*.sof
+*.pof
+
+# Ignore Quartus and ModelSim simulation snapshot files
+*.dsn
+*.sof
+*.jic
