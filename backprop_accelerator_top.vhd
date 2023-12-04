@@ -8,8 +8,8 @@ entity backprop_accelerator_top is
   generic
   (
     DATA_WIDTH          : integer := 8; -- Specify the width of the register
-    OUTPUT_SIZE         : integer := 127;
-    INPUT_SIZE          : integer := 127;
+    OUTPUT_SIZE         : integer := 2;
+    INPUT_SIZE          : integer := 3;
     GRADIENT_DATA_DEPTH : integer := 8;
     INPUT_DATA_DEPTH    : integer := 8;
     WEIGHT_DATA_DEPTH   : integer := 8;

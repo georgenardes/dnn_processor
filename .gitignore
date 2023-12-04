@@ -65,3 +65,7 @@ modelsim.ini
 *.dsn
 *.sof
 *.jic
+
+*.jpeg
+*.jpg
+*.exe

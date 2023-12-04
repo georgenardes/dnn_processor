@@ -32,30 +32,26 @@ void print_weights(int matrix[][INPUT_SIZE])
 }
 
 // Função para realizar a retropropagação do erro, calcular o gradiente dos pesos e o erro da camada anterior
-void backward(int weights[][INPUT_SIZE], int bias[OUTPUT_SIZE], int input[INPUT_SIZE], int gradient[OUTPUT_SIZE], int error_next[INPUT_SIZE], int learning_rate)
+void backward(int weights[][INPUT_SIZE], int bias[OUTPUT_SIZE], int input[INPUT_SIZE], int gradient[OUTPUT_SIZE], int error_prev[INPUT_SIZE], int learning_rate)
 {
+  int weights_gradient;
+  int bias_gradient;
+
   // Calcula o erro da camada anterior
   for (int j = 0; j < INPUT_SIZE; j++)
   {
-    error_next[j] = 0;
+    error_prev[j] = 0;
     for (int i = 0; i < OUTPUT_SIZE; i++)
     {
-      error_next[j] += gradient[i] * weights[i][j];
-      std::cout << "[i][j] = " << i << j << " = " << i * INPUT_SIZE + j << " = " << error_next[j] << " -- ";
-      std::cout << gradient[i] << "  " << weights[i][j] << endl;
+      error_prev[j] += gradient[i] * weights[i][j];
     }
   }
-  std::cout << "______" << endl;
-  int weights_gradient;
-  int bias_gradient;
 
   // Calcula o gradiente em relação aos pesos
   for (int i = 0; i < OUTPUT_SIZE; i++)
   {
     for (int j = 0; j < INPUT_SIZE; j++)
     {
-      std::cout << "[i][j] = " << i << j << " = " << i * INPUT_SIZE + j << "  -- ";
-      std::cout << gradient[i] << "   " << input[j] << endl;
       weights_gradient = (gradient[i] * input[j]);
 
       // update weight
@@ -64,7 +60,7 @@ void backward(int weights[][INPUT_SIZE], int bias[OUTPUT_SIZE], int input[INPUT_
     bias_gradient = gradient[i];
 
     // update bias
-    bias[i] -= bias_gradient  >> learning_rate;
+    bias[i] -= bias_gradient >> learning_rate;
   }
 }
 
@@ -84,13 +80,13 @@ int main()
   int output_gradient[OUTPUT_SIZE] = {-5, 5};
 
   // gradiente da entrada da camada (a ser calculado)
-  int intput_gradient[INPUT_SIZE];
+  int err_prev[INPUT_SIZE];
 
   // taxa de aprendizado (como fator de deslocamento a direita)
   int learning_rate = 6;
 
   // Retropropagação do erro e atualização dos pesos
-  backward(weights, bias, input, output_gradient, intput_gradient, learning_rate);
+  backward(weights, bias, input, output_gradient, err_prev, learning_rate);
 
   /**
    * Saídas esperadas
@@ -109,7 +105,7 @@ int main()
    * Saídas esperadas
      10 0 -10
   */
-  print_vector(intput_gradient, INPUT_SIZE);
+  print_vector(err_prev, INPUT_SIZE);
 
   return 0;
 }

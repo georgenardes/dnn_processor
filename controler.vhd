@@ -115,9 +115,9 @@ begin
 
   end process;
 
-  o_i_rst <= '1' when (r_STATE = s_INIT or r_STATE = s_0 or r_STATE = s_4) else
+  o_i_rst <= '1' when (r_STATE = s_INIT or r_STATE = s_1 or r_STATE = s_4) else
     '0';
-  o_j_rst <= '1' when (r_STATE = s_INIT or r_STATE = s_5 or r_STATE = s_4) else
+  o_j_rst <= '1' when (r_STATE = s_INIT or r_STATE = s_5) else
     '0';
 
   o_i_inc <= '1' when (r_STATE = s_3_1 or r_STATE = s_8) else
