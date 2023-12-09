@@ -9,7 +9,7 @@ entity backprop_accelerator_top is
   (
     DATA_WIDTH          : integer := 8; -- Specify the width of the register
     OUTPUT_SIZE         : integer := 2;
-    INPUT_SIZE          : integer := 3;
+    INPUT_SIZE          : integer := 128;
     GRADIENT_DATA_DEPTH : integer := 8;
     INPUT_DATA_DEPTH    : integer := 8;
     WEIGHT_DATA_DEPTH   : integer := 8;
@@ -19,11 +19,16 @@ entity backprop_accelerator_top is
   );
   port
   (
-    i_clk   : in std_logic; -- Clock input
-    i_rst   : in std_logic; -- Reset signal
-    i_clear : in std_logic; -- Clear signal
-    i_go    : in std_logic; -- Increment counter
-    o_ready : out std_logic
+    i_clk      : in std_logic; -- Clock input
+    i_rst      : in std_logic; -- Reset signal
+    i_clear    : in std_logic; -- Clear signal
+    i_go       : in std_logic; -- Increment counter
+    o_gradient : out std_logic_vector(DATA_WIDTH - 1 downto 0);
+    o_input    : out std_logic_vector(DATA_WIDTH - 1 downto 0);
+    o_weight   : out std_logic_vector(DATA_WIDTH - 1 downto 0);
+    o_err_next : out std_logic_vector(2 * DATA_WIDTH - 1 downto 0);
+    o_bias     : out std_logic_vector(DATA_WIDTH - 1 downto 0);
+    o_ready    : out std_logic
   );
 end entity backprop_accelerator_top;
 
@@ -122,18 +127,18 @@ architecture arch of backprop_accelerator_top is
       i_wren          : in std_logic_vector(4 downto 0);
       i_gradient      : in std_logic_vector(DATA_WIDTH - 1 downto 0);
       i_gradient_addr : in std_logic_vector(GRADIENT_DATA_DEPTH - 1 downto 0);
-      o_gradient      : out std_logic_vector(DATA_WIDTH - 1 downto 0);
       i_input         : in std_logic_vector(DATA_WIDTH - 1 downto 0);
       i_input_addr    : in std_logic_vector(INPUT_DATA_DEPTH - 1 downto 0);
-      o_input         : out std_logic_vector(DATA_WIDTH - 1 downto 0);
       i_weight        : in std_logic_vector(DATA_WIDTH - 1 downto 0);
       i_weight_addr   : in std_logic_vector(WEIGHT_DATA_DEPTH - 1 downto 0);
-      o_weight        : out std_logic_vector(DATA_WIDTH - 1 downto 0);
       i_err_next      : in std_logic_vector(2 * DATA_WIDTH - 1 downto 0);
       i_err_next_addr : in std_logic_vector(ERR_NEXT_DATA_DEPTH - 1 downto 0);
-      o_err_next      : out std_logic_vector(2 * DATA_WIDTH - 1 downto 0);
       i_bias          : in std_logic_vector(DATA_WIDTH - 1 downto 0);
       i_bias_addr     : in std_logic_vector(BIAS_DATA_DEPTH - 1 downto 0);
+      o_gradient      : out std_logic_vector(DATA_WIDTH - 1 downto 0);
+      o_input         : out std_logic_vector(DATA_WIDTH - 1 downto 0);
+      o_weight        : out std_logic_vector(DATA_WIDTH - 1 downto 0);
+      o_err_next      : out std_logic_vector(2 * DATA_WIDTH - 1 downto 0);
       o_bias          : out std_logic_vector(DATA_WIDTH - 1 downto 0)
     );
   end component;
@@ -178,20 +183,27 @@ begin
     i_wren          => w_o_bias_wren & w_o_err_next_wren & w_o_weight_wren & "00",
     i_gradient      => w_i_gradient,
     i_gradient_addr => w_i,
-    o_gradient      => w_o_gradient,
     i_input         => w_i_input,
     i_input_addr    => w_j,
-    o_input         => w_o_input,
     i_weight        => w_i_weight,
     i_weight_addr   => w_weight_addr,
-    o_weight        => w_o_weight,
     i_err_next      => w_i_err_next,
     i_err_next_addr => w_j,
-    o_err_next      => w_o_err_next,
     i_bias          => w_i_bias,
     i_bias_addr     => w_i,
+    o_gradient      => w_o_gradient,
+    o_input         => w_o_input,
+    o_weight        => w_o_weight,
+    o_err_next      => w_o_err_next,
     o_bias          => w_o_bias
   );
+
+  o_gradient <=     w_o_gradient;
+  o_input    <=     w_o_input;
+  o_weight   <=     w_o_weight;
+  o_err_next <=     w_o_err_next;
+  o_bias     <=     w_o_bias;
+
 
   memory_indexer_inst : memory_indexer
   generic
