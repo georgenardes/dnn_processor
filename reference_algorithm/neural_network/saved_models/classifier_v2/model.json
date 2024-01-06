@@ -1,0 +1,47 @@
+{
+    "modelName": "classifier_v2",
+    "layers": [
+        {
+            "layerName": "input_1",
+            "activation": "Linear",
+            "weightPath": "./saved_models/classifier_v2/0.InputLayer.input_1.Linear.weights",
+            "biasPath": "./saved_models/classifier_v2/0.InputLayer.input_1.Linear.bias"
+        },
+        {
+            "layerName": "depthwise_conv2d",
+            "activation": "linear",
+            "weightPath": "./saved_models/classifier_v2/1.DepthwiseConv2D.depthwise_conv2d.linear.weights",
+            "biasPath": "./saved_models/classifier_v2/1.DepthwiseConv2D.depthwise_conv2d.linear.bias"
+        },
+        {
+            "layerName": "conv2d",
+            "activation": "tanh",
+            "weightPath": "./saved_models/classifier_v2/2.Conv2D.conv2d.tanh.weights",
+            "biasPath": "./saved_models/classifier_v2/2.Conv2D.conv2d.tanh.bias"
+        },
+        {
+            "layerName": "encoder_output",
+            "activation": "linear",
+            "weightPath": "./saved_models/classifier_v2/3.Conv2D.encoder_output.linear.weights",
+            "biasPath": "./saved_models/classifier_v2/3.Conv2D.encoder_output.linear.bias"
+        },
+        {
+            "layerName": "flatten",
+            "activation": "Linear",
+            "weightPath": "./saved_models/classifier_v2/4.Flatten.flatten.Linear.weights",
+            "biasPath": "./saved_models/classifier_v2/4.Flatten.flatten.Linear.bias"
+        },
+        {
+            "layerName": "dropout",
+            "activation": "Linear",
+            "weightPath": "./saved_models/classifier_v2/5.None.dropout.Linear.weights",
+            "biasPath": "./saved_models/classifier_v2/5.None.dropout.Linear.bias"
+        },
+        {
+            "layerName": "dense",
+            "activation": "softmax",
+            "weightPath": "./saved_models/classifier_v2/6.Dense.dense.softmax.weights",
+            "biasPath": "./saved_models/classifier_v2/6.Dense.dense.softmax.bias"
+        }
+    ]
+}
