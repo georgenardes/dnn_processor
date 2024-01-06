@@ -75,3 +75,5 @@ modelsim.ini
 .venv
 
 *.zip
+
+*__pycache__*
