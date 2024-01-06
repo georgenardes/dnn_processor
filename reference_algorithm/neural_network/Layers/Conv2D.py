@@ -44,7 +44,6 @@ def convolution(inputs, filters, bias, strides, padding):
     for b in range(ib):
         for h in range(oh):
             for w in range(ow):
-                print(h, w)
                 for m in range(fm):
                     # Extract the region from the input using array slicing
                     input_region = padded_inputs[
