@@ -1,4 +1,4 @@
-from BaseLayer import Layer
+from Layers.BaseLayer import Layer
 import numpy as np
 
 

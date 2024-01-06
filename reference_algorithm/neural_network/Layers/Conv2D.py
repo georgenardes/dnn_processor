@@ -1,9 +1,17 @@
-from BaseLayer import Layer
+from Layers.BaseLayer import Layer
 import numpy as np
 
 
-class FullyConnectedLayer(Layer):
-    def __init__(self, name="FullyConnectedLayer", activation=None):
+def convolution(inputs, filters, bias):
+    ib, ih, iw, ic = inputs.shape
+    fm, fh, fw, fc = filters.shape
+
+    print("not implemented...")
+    return inputs
+
+
+class Conv2D(Layer):
+    def __init__(self, name="Conv2D", activation=None):
         super().__init__(name)
         self.weights = None
         self.bias = None
@@ -13,9 +21,9 @@ class FullyConnectedLayer(Layer):
         outputs = None
 
         if training:
-            raise NotImplementedError("FC trainin not implemented")
+            raise NotImplementedError("Conv2D trainin not implemented")
         else:
-            outputs = np.matmul(inputs, self.weights) + self.bias
+            outputs = convolution(inputs, self.weights, self.bias)
 
         if self.activation is not None:
             outputs = self.activation(outputs, training)
