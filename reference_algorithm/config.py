@@ -1,5 +1,5 @@
 import numpy as np
-import array_to_mif as am
+import utils.array_to_mif as am
 
 np.random.seed(2)
 
