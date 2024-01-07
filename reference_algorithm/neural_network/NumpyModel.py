@@ -3,7 +3,7 @@ class Model:
         self.name = name
         self.layers = []
 
-    def __call__(self, inputs, training: bool):
+    def __call__(self, inputs, training: bool = False):
         x = inputs
         for l in self.layers:
             x = l(x, training)
