@@ -1,6 +1,20 @@
 from Layers.BaseLayer import Layer
 import numpy as np
 
+"""
+fm in depthwise convolution means depth multiplier.
+https://www.tensorflow.org/api_docs/python/tf/nn/depthwise_conv2d
+
+
+Given a 4D input tensor ('NHWC' or 'NCHW' data formats) and a filter 
+tensor of shape [filter_height, filter_width, in_channels, channel_multiplier]
+containing in_channels convolutional filters of depth 1, depthwise_conv2d 
+applies a different filter to each input channel (expanding from 1 channel
+to channel_multiplier channels for each), then concatenates the results 
+together. The output has in_channels * channel_multiplier channels.
+
+"""
+
 
 def depthwise_convolution(inputs, filters, bias, strides, padding):
     ib, ih, iw, ic = inputs.shape
@@ -38,32 +52,42 @@ def depthwise_convolution(inputs, filters, bias, strides, padding):
     else:
         raise ValueError("Invalid padding")
 
-    output = np.zeros((ib, oh, ow, fm))
+    oc = fc * fm
+    output = np.zeros((ib, oh, ow, oc))
 
     for b in range(ib):
         for h in range(oh):
             for w in range(ow):
-                for m in range(fm):
-                    # Extract the region from the input using array slicing
-                    input_region = padded_inputs[
-                        b,
-                        h * stride_h : h * stride_h + fh,
-                        w * stride_w : w * stride_w + fw,
-                        :,
-                    ]
-                    # Perform depthwise convolution
-                    output[b, h, w, m] = np.sum(input_region * filters[:, :, :, m]) + bias[m]
+                for k in range(fc):
+                    for q in range(fm):
+                        # Extract the region from the input using array slicing
+                        input_region = padded_inputs[
+                            b,
+                            h * stride_h : h * stride_h + fh,
+                            w * stride_w : w * stride_w + fw,
+                            k,
+                        ]
+                        # Perform depthwise convolution
+                        output[b, h, w, k * fm + q] = (
+                            np.sum(input_region * filters[:, :, k, q])
+                            + bias[k * fm + q]
+                        )
 
     return output
 
 
 class DephtwiseConv2D(Layer):
-    def __init__(self, padding, strides, depth_multiplier, activation=None,  name="DephtwiseConv2D"):
+    def __init__(
+        self,
+        padding,
+        strides,
+        activation=None,
+        name="DephtwiseConv2D",
+    ):
         super().__init__(name)
         self.weights = None
         self.bias = None
         self.activation = activation
-        self.depth_multiplier = depth_multiplier
         self.padding = padding
         self.strides = strides
 

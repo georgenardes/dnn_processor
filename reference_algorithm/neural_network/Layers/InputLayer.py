@@ -14,11 +14,7 @@ class InputLayer(Layer):
         else:
             outputs = inputs
 
-        if self.activation is not None:
-            outputs = self.activation(outputs, training)
-
         return outputs
 
     def get_config(self):
         return {"name": self.name}
-

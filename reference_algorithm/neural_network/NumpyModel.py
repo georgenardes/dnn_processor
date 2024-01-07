@@ -4,7 +4,15 @@ class Model:
         self.layers = []
 
     def __call__(self, inputs, training: bool):
-        pass
+        x = inputs
+        for l in self.layers:
+            x = l(x, training)
+
+        return x
 
     def load_model(self, model_path):
         pass
+
+    def summary(self):
+        for l in self.layers:
+            print(l.name)

@@ -12,10 +12,7 @@ class Flatten(Layer):
         if training:
             raise NotImplementedError("Flatten trainin not implemented")
         else:
-            outputs = inputs
-
-        if self.activation is not None:
-            outputs = self.activation(outputs, training)
+            outputs = np.reshape(inputs, newshape=[inputs.shape[0], -1])
 
         return outputs
 
