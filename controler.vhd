@@ -8,28 +8,18 @@ use work.types_pkg.all;
 entity controler is
   port
   (
-    i_clk           : in std_logic; -- clock input
-    i_rst           : in std_logic; -- clear signal
-    i_go            : in std_logic; -- start signal
-    i_i_comp        : in std_logic; -- input signal control
-    i_j_comp        : in std_logic; -- input signal control
-    o_i_rst         : out std_logic; -- output signal control
-    o_j_rst         : out std_logic; -- output signal control
-    o_i_inc         : out std_logic; -- output signal control
-    o_j_inc         : out std_logic; -- output signal control
-    o_mux_mul_sel   : out std_logic;
-    o_mux_err_sel   : out std_logic;
-    o_err_next_wren : out std_logic;
-    o_weight_wren   : out std_logic;
-    o_bias_wren     : out std_logic;
-
-    o_ready : out std_logic -- Output data
+    i_clk                    : in std_logic; -- clock input
+    i_rst                    : in std_logic; -- clear signal
+    i_go                     : in std_logic; -- start signal
+    o_dram_addr_inc          : out std_logic;
+    o_input_router_write_out : out std_logic;
+    o_ready                  : out std_logic -- Output data
   );
 end entity controler;
 
 architecture arch of controler is
   -- Define states
-  type t_STATE is (s_INIT, s_0, s_1, s_2, s_2_s_0, s_3, s_3_1, s_4, s_5, s_6, s_7, s_7_1, s_8, s_9);
+  type t_STATE is (s_INIT, s0, s1, s2, s3, s4, s5, s6, s7, s71, s8, s9);
   signal r_STATE, w_NEXT : t_STATE;
 begin
 
@@ -42,71 +32,49 @@ begin
     end if;
   end process;
 
-  p_NEXT : process (r_STATE, i_go, i_i_comp, i_j_comp)
+  p_NEXT : process (r_STATE, i_go)
   begin
     -- State transitions
     case r_STATE is
       when s_INIT =>
         if (i_GO = '1') then
-          w_NEXT <= s_0;
+          w_NEXT <= s0;
         else
           w_NEXT <= s_INIT;
         end if;
 
-      when s_0 =>
-        if (i_j_comp = '1') then
-          w_NEXT <= s_1;
-        else
-          w_NEXT <= s_4;
-        end if;
+      when s0 =>
+        w_NEXT <= s1;
 
-      when s_1 =>
-        w_NEXT <= s_2;
+      when s1 =>
+        w_NEXT <= s2;
 
-      when s_2 =>
-        if (i_i_comp = '1') then
-          w_NEXT <= s_3;
-        else
-          w_NEXT <= s_2_s_0;
-        end if;
+      when s2 =>
+        w_NEXT <= s3;
 
-      when s_2_s_0 =>
-        w_NEXT <= s_0;
+      when s3 =>
+        w_NEXT <= s4;
 
-      when s_3 =>
-        w_NEXT <= s_3_1;
+      when s4 =>
+        w_NEXT <= s5;
 
-      when s_3_1 =>
-        w_NEXT <= s_2;
+      when s5 =>
+        w_NEXT <= s6;
 
-      when s_4 =>
-        w_NEXT <= s_5;
+      when s6 =>
+        w_NEXT <= s7;
 
-      when s_5 =>
-        if (i_i_comp = '1') then
-          w_NEXT <= s_6;
-        else
-          w_NEXT <= s_9;
-        end if;
+      when s7 =>
+        w_NEXT <= s71;
 
-      when s_6 =>
-        if (i_j_comp = '1') then
-          w_NEXT <= s_7;
-        else
-          w_NEXT <= s_8;
-        end if;
+      when s71 =>
+        w_NEXT <= s8;
 
-      when s_7 =>
-        w_NEXT <= s_7_1;
+      when s8 =>
+        w_NEXT <= s9;
 
-      when s_7_1 =>
-        w_NEXT <= s_6;
-
-      when s_8 =>
-        w_NEXT <= s_5;
-
-      when s_9 =>
-        w_NEXT <= s_9;
+      when s9 =>
+        w_NEXT <= s_INIT;
 
       when others =>
         w_NEXT <= s_INIT;
@@ -115,31 +83,11 @@ begin
 
   end process;
 
-  o_i_rst <= '1' when (r_STATE = s_INIT or r_STATE = s_1 or r_STATE = s_4) else
+  o_dram_addr_inc <= '1' when (r_STATE = s0 or r_STATE = s1 or r_STATE = s3 or r_STATE = s4) else
     '0';
-  o_j_rst <= '1' when (r_STATE = s_INIT or r_STATE = s_5) else
-    '0';
-
-  o_i_inc <= '1' when (r_STATE = s_3_1 or r_STATE = s_8) else
-    '0';
-  o_j_inc <= '1' when (r_STATE = s_2_s_0 or r_STATE = s_7_1) else
+  o_input_router_write_out <= '1'when (r_STATE = s4 or r_STATE = s5) else
     '0';
 
-  o_mux_mul_sel <= '1' when (r_STATE = s_1 or r_STATE = s_3_1) else
-    '0';
-
-  o_mux_err_sel <= '1' when (r_STATE = s_1) else
-    '0';
-
-  o_err_next_wren <= '1' when (r_STATE = s_1 or r_STATE = s_3_1) else
-    '0';
-
-  o_weight_wren <= '1' when (r_STATE = s_7_1) else
-    '0';
-
-  o_bias_wren <= '1' when (r_STATE = s_8) else
-    '0';
-
-  o_ready <= '1' when (r_STATE = s_9) else
+    o_ready <= '1' when (r_STATE = s9) else
     '0';
 end architecture arch;

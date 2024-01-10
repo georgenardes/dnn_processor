@@ -9,43 +9,52 @@ end;
 architecture bench of backprop_accelerator_top_tb is
   -- Clock period
   constant c_clk_period : time := 10 ns;
-  -- Generics
-  constant DATA_WIDTH          : integer := 8;
-  constant OUTPUT_SIZE         : integer := 2;
-  constant INPUT_SIZE          : integer := 3;
-  constant GRADIENT_DATA_DEPTH : integer := 8;
-  constant INPUT_DATA_DEPTH    : integer := 8;
-  constant WEIGHT_DATA_DEPTH   : integer := 8;
-  constant ERR_NEXT_DATA_DEPTH : integer := 8;
-  constant BIAS_DATA_DEPTH     : integer := 8;
-  constant LEARNING_RATE_RS    : integer := 6;
-  -- Ports
-  signal w_clk   : std_logic := '0';
-  signal w_rst   : std_logic := '0';
-  signal w_clear : std_logic := '0';
-  signal w_go    : std_logic := '0';
-  signal w_ready : std_logic;
 
+  -- Generics
+  constant c_DATA_WIDTH        : integer := 8;
+  constant c_PARALELISM_FACTOR : integer := 16;
+  constant c_BUFFER_DEPTH      : integer := 8;
+  constant c_DRAM_WIDTH        : integer := 16;
+  constant c_DRAM_DEPTH        : integer := 12;
+
+  -- signals
+  signal w_clk                 : std_logic;
+  signal w_rst                 : std_logic;
+  signal w_clear               : std_logic;
+  signal w_go                  : std_logic;
+  signal w_inc_channel_row_ctr : std_logic;
+  signal w_inc_channel_col_ctr : std_logic;
+  signal w_write_out           : std_logic;
+  signal w_batch               : std_logic_vector(c_BUFFER_DEPTH - 1 downto 0);
+  signal w_heigth              : std_logic_vector(c_BUFFER_DEPTH - 1 downto 0);
+  signal w_width               : std_logic_vector(c_BUFFER_DEPTH - 1 downto 0);
+  signal w_nun_channels        : std_logic_vector(c_BUFFER_DEPTH - 1 downto 0);
+  signal w_data                : std_logic_vector(31 downto 0);
+  signal w_ready               : std_logic;
   component backprop_accelerator_top
     generic
     (
-      DATA_WIDTH          : integer;
-      OUTPUT_SIZE         : integer;
-      INPUT_SIZE          : integer;
-      GRADIENT_DATA_DEPTH : integer;
-      INPUT_DATA_DEPTH    : integer;
-      WEIGHT_DATA_DEPTH   : integer;
-      ERR_NEXT_DATA_DEPTH : integer;
-      BIAS_DATA_DEPTH     : integer;
-      LEARNING_RATE_RS    : integer
+      DATA_WIDTH        : integer;
+      PARALELISM_FACTOR : integer;
+      BUFFER_DEPTH      : integer;
+      DRAM_WIDTH        : integer;
+      DRAM_DEPTH        : integer
     );
     port
     (
-      i_clk   : in std_logic;
-      i_rst   : in std_logic;
-      i_clear : in std_logic;
-      i_go    : in std_logic;
-      o_ready : out std_logic
+      i_clk                 : in std_logic;
+      i_rst                 : in std_logic;
+      i_clear               : in std_logic;
+      i_go                  : in std_logic;
+      i_inc_channel_row_ctr : in std_logic;
+      i_inc_channel_col_ctr : in std_logic;
+      i_write_out           : in std_logic;
+      i_batch               : in std_logic_vector(BUFFER_DEPTH - 1 downto 0);
+      i_heigth              : in std_logic_vector(BUFFER_DEPTH - 1 downto 0);
+      i_width               : in std_logic_vector(BUFFER_DEPTH - 1 downto 0);
+      i_nun_channels        : in std_logic_vector(BUFFER_DEPTH - 1 downto 0);
+      o_data                : out std_logic_vector(31 downto 0);
+      o_ready               : out std_logic
     );
   end component;
 begin
@@ -53,25 +62,28 @@ begin
   backprop_accelerator_top_inst : backprop_accelerator_top
   generic
   map (
-  DATA_WIDTH          => DATA_WIDTH,
-  OUTPUT_SIZE         => OUTPUT_SIZE,
-  INPUT_SIZE          => INPUT_SIZE,
-  GRADIENT_DATA_DEPTH => GRADIENT_DATA_DEPTH,
-  INPUT_DATA_DEPTH    => INPUT_DATA_DEPTH,
-  WEIGHT_DATA_DEPTH   => WEIGHT_DATA_DEPTH,
-  ERR_NEXT_DATA_DEPTH => ERR_NEXT_DATA_DEPTH,
-  BIAS_DATA_DEPTH     => BIAS_DATA_DEPTH,
-  LEARNING_RATE_RS    => LEARNING_RATE_RS
+  DATA_WIDTH        => c_DATA_WIDTH,
+  PARALELISM_FACTOR => c_PARALELISM_FACTOR,
+  BUFFER_DEPTH      => c_BUFFER_DEPTH,
+  DRAM_WIDTH        => c_DRAM_WIDTH,
+  DRAM_DEPTH        => c_DRAM_DEPTH
   )
   port map
   (
-    i_clk   => w_clk,
-    i_rst   => w_rst,
-    i_clear => w_clear,
-    i_go    => w_go,
-    o_ready => w_ready
+    i_clk                 => w_clk,
+    i_rst                 => w_rst,
+    i_clear               => w_clear,
+    i_go                  => w_go,
+    i_inc_channel_row_ctr => w_inc_channel_row_ctr,
+    i_inc_channel_col_ctr => w_inc_channel_col_ctr,
+    i_write_out           => w_write_out,
+    i_batch               => w_batch,
+    i_heigth              => w_heigth,
+    i_width               => w_width,
+    i_nun_channels        => w_nun_channels,
+    o_data                => w_data,
+    o_ready               => w_ready
   );
-
   p_CLK : process
   begin
     w_clk <= '1';

@@ -5,7 +5,7 @@ use IEEE.NUMERIC_STD.all;
 entity memory_indexer is
   generic
   (
-    WIDTH       : integer := 4; -- Specify the width of the register
+    DATA_WIDTH  : integer := 4; -- Specify the DATA_width of the register
     OUTPUT_SIZE : integer := 2;
     INPUT_SIZE  : integer := 3);
   port
@@ -18,17 +18,17 @@ entity memory_indexer is
     i_inc_j       : in std_logic; -- Increment counter
     o_i_comp      : out std_logic; -- Output signal control
     o_j_comp      : out std_logic; -- Output signal control
-    o_i           : out std_logic_vector(WIDTH - 1 downto 0); -- Output data
-    o_j           : out std_logic_vector(WIDTH - 1 downto 0); -- Output data
-    o_weight_addr : out std_logic_vector(WIDTH - 1 downto 0) -- Output data
+    o_i           : out std_logic_vector(DATA_WIDTH - 1 downto 0); -- Output data
+    o_j           : out std_logic_vector(DATA_WIDTH - 1 downto 0); -- Output data
+    o_weight_addr : out std_logic_vector(DATA_WIDTH - 1 downto 0) -- Output data
   );
 end entity memory_indexer;
 
 architecture arch of memory_indexer is
 
-  signal w_weight_addr : std_logic_vector(2 * WIDTH - 1 downto 0);
-  signal w_i_cntr      : std_logic_vector(WIDTH - 1 downto 0);
-  signal w_j_cntr      : std_logic_vector(WIDTH - 1 downto 0);
+  signal w_weight_addr : std_logic_vector(2 * DATA_WIDTH - 1 downto 0);
+  signal w_i_cntr      : std_logic_vector(DATA_WIDTH - 1 downto 0);
+  signal w_j_cntr      : std_logic_vector(DATA_WIDTH - 1 downto 0);
   component up_counter is
     generic
     (
@@ -86,37 +86,22 @@ architecture arch of memory_indexer is
   end component;
 
 begin
-  -- weight_indexer : gen_up_counter
-  -- generic
-  -- map (
-  -- WIDTH => WIDTH
-  -- )
-  -- port map
-  -- (
-  --   i_clk          => i_clk,
-  --   i_clear        => i_clear or i_rst_j,
-  --   i_inc          => i_inc_j,
-  --   i_load_inc_val => '1',
-  --   i_inc_val      => std_logic_vector(to_unsigned(INPUT_SIZE, WIDTH)),
-  --   o_q            => w_weight_addr
-  -- );
-
-  gen_multiplier_inst : entity work.gen_multiplier
+  gen_multiplier_inst : gen_multiplier
     generic
     map (
-    WIDTH => WIDTH
+    WIDTH => DATA_WIDTH
     )
     port map
     (
       i_a      => w_i_cntr,
-      i_b      => std_logic_vector(to_unsigned(INPUT_SIZE, WIDTH)),
+      i_b      => std_logic_vector(to_unsigned(INPUT_SIZE, DATA_WIDTH)),
       o_result => w_weight_addr
     );
 
   j_counter : up_counter
   generic
   map (
-  WIDTH => WIDTH
+  WIDTH => DATA_WIDTH
   )
   port
   map (
@@ -129,7 +114,7 @@ begin
   i_counter : up_counter
   generic
   map (
-  WIDTH => WIDTH
+  WIDTH => DATA_WIDTH
   )
   port
   map (
@@ -142,28 +127,28 @@ begin
   j_comp : gen_comparator
   generic
   map (
-  WIDTH => WIDTH
+  WIDTH => DATA_WIDTH
   )
   port
   map (
   i_A => w_j_cntr,
-  i_B => std_logic_vector(to_unsigned(INPUT_SIZE, WIDTH)),
+  i_B => std_logic_vector(to_unsigned(INPUT_SIZE, DATA_WIDTH)),
   o_Q => o_j_comp
   );
 
   i_comp : gen_comparator
   generic
   map (
-  WIDTH => WIDTH
+  WIDTH => DATA_WIDTH
   )
   port
   map (
   i_A => w_i_cntr,
-  i_B => std_logic_vector(to_unsigned(OUTPUT_SIZE, WIDTH)),
+  i_B => std_logic_vector(to_unsigned(OUTPUT_SIZE, DATA_WIDTH)),
   o_Q => o_i_comp
   );
 
   o_j           <= w_j_cntr;
   o_i           <= w_i_cntr;
-  o_weight_addr <= std_logic_vector(unsigned(w_weight_addr(WIDTH-1 downto 0)) + unsigned(w_j_cntr));
+  o_weight_addr <= std_logic_vector(unsigned(w_weight_addr(DATA_WIDTH - 1 downto 0)) + unsigned(w_j_cntr));
 end architecture arch;

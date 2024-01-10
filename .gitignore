@@ -69,3 +69,11 @@ modelsim.ini
 *.jpeg
 *.jpg
 *.exe
+
+
+# python
+.venv
+
+*.zip
+
+*__pycache__*
