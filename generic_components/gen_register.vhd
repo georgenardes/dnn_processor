@@ -4,20 +4,20 @@ use IEEE.STD_LOGIC_1164.all;
 entity gen_register is
   generic
   (
-    WIDTH : integer := 4 -- Specify the width of the register
+    DATA_WIDTH : integer := 4 -- Specify the DATA_width of the register
   );
   port
   (
     i_clk   : in std_logic; -- Clock input
     i_clear : in std_logic; -- Clear signal
     i_load  : in std_logic; -- Load signal
-    i_data  : in std_logic_vector(WIDTH - 1 downto 0); -- Input data
-    o_q     : out std_logic_vector(WIDTH - 1 downto 0) -- Output data
+    i_data  : in std_logic_vector(DATA_WIDTH - 1 downto 0); -- Input data
+    o_q     : out std_logic_vector(DATA_WIDTH - 1 downto 0) -- Output data
   );
 end entity gen_register;
 
 architecture arch of gen_register is
-  signal r_reg : std_logic_vector(WIDTH - 1 downto 0);
+  signal r_reg : std_logic_vector(DATA_WIDTH - 1 downto 0);
 begin
   process (i_clk, i_clear, i_load, i_data)
   begin
