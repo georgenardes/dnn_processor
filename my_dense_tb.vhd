@@ -16,49 +16,49 @@ architecture rtl of my_dense_tb is
   -- Clock period
   constant c_clk_period : time := 10 ns;
   -- signals
-  signal w_ap_clk           : std_logic;
-  signal w_ap_rst           : std_logic;
-  signal w_ap_start         : std_logic;
-  signal w_ap_done_my       : std_logic;
-  signal w_ap_idle_my       : std_logic;
-  signal w_ap_ready_my      : std_logic;
-  signal w_ap_done_their    : std_logic;
-  signal w_ap_idle_their    : std_logic;
-  signal w_ap_ready_their   : std_logic;
-  signal w_data_0_V_read    : std_logic_vector (DATA_WIDTH - 1 downto 0);
-  signal w_data_1_V_read    : std_logic_vector (DATA_WIDTH - 1 downto 0);
-  signal w_data_2_V_read    : std_logic_vector (DATA_WIDTH - 1 downto 0);
-  signal w_data_3_V_read    : std_logic_vector (DATA_WIDTH - 1 downto 0);
-  signal w_data_4_V_read    : std_logic_vector (DATA_WIDTH - 1 downto 0);
-  signal w_data_5_V_read    : std_logic_vector (DATA_WIDTH - 1 downto 0);
-  signal w_data_6_V_read    : std_logic_vector (DATA_WIDTH - 1 downto 0);
-  signal w_data_7_V_read    : std_logic_vector (DATA_WIDTH - 1 downto 0);
-  signal w_data_8_V_read    : std_logic_vector (DATA_WIDTH - 1 downto 0);
-  signal w_data_9_V_read    : std_logic_vector (DATA_WIDTH - 1 downto 0);
-  signal w_data_10_V_read   : std_logic_vector (DATA_WIDTH - 1 downto 0);
-  signal w_data_11_V_read   : std_logic_vector (DATA_WIDTH - 1 downto 0);
-  signal w_data_12_V_read   : std_logic_vector (DATA_WIDTH - 1 downto 0);
-  signal w_data_13_V_read   : std_logic_vector (DATA_WIDTH - 1 downto 0);
-  signal w_data_14_V_read   : std_logic_vector (DATA_WIDTH - 1 downto 0);
-  signal w_data_15_V_read   : std_logic_vector (DATA_WIDTH - 1 downto 0);
-  signal w_weight_0_V_read  : std_logic_vector (DATA_WIDTH - 1 downto 0);
-  signal w_weight_1_V_read  : std_logic_vector (DATA_WIDTH - 1 downto 0);
-  signal w_weight_2_V_read  : std_logic_vector (DATA_WIDTH - 1 downto 0);
-  signal w_weight_3_V_read  : std_logic_vector (DATA_WIDTH - 1 downto 0);
-  signal w_weight_4_V_read  : std_logic_vector (DATA_WIDTH - 1 downto 0);
-  signal w_weight_5_V_read  : std_logic_vector (DATA_WIDTH - 1 downto 0);
-  signal w_weight_6_V_read  : std_logic_vector (DATA_WIDTH - 1 downto 0);
-  signal w_weight_7_V_read  : std_logic_vector (DATA_WIDTH - 1 downto 0);
-  signal w_weight_8_V_read  : std_logic_vector (DATA_WIDTH - 1 downto 0);
-  signal w_weight_9_V_read  : std_logic_vector (DATA_WIDTH - 1 downto 0);
-  signal w_weight_10_V_read : std_logic_vector (DATA_WIDTH - 1 downto 0);
-  signal w_weight_11_V_read : std_logic_vector (DATA_WIDTH - 1 downto 0);
-  signal w_weight_12_V_read : std_logic_vector (DATA_WIDTH - 1 downto 0);
-  signal w_weight_13_V_read : std_logic_vector (DATA_WIDTH - 1 downto 0);
-  signal w_weight_14_V_read : std_logic_vector (DATA_WIDTH - 1 downto 0);
-  signal w_weight_15_V_read : std_logic_vector (DATA_WIDTH - 1 downto 0);
-  signal w_ap_return_my     : std_logic_vector (DATA_WIDTH - 1 downto 0);
-  signal w_ap_return_their  : std_logic_vector (DATA_WIDTH - 1 downto 0);
+  signal w_ap_clk           : std_logic                                  := '0';
+  signal w_ap_rst           : std_logic                                  := '0';
+  signal w_ap_start         : std_logic                                  := '0';
+  signal w_ap_done_my       : std_logic                                  := '0';
+  signal w_ap_idle_my       : std_logic                                  := '0';
+  signal w_ap_ready_my      : std_logic                                  := '0';
+  signal w_ap_done_their    : std_logic                                  := '0';
+  signal w_ap_idle_their    : std_logic                                  := '0';
+  signal w_ap_ready_their   : std_logic                                  := '0';
+  signal w_data_0_V_read    : std_logic_vector (DATA_WIDTH - 1 downto 0) := (others => '0');
+  signal w_data_1_V_read    : std_logic_vector (DATA_WIDTH - 1 downto 0) := (others => '0');
+  signal w_data_2_V_read    : std_logic_vector (DATA_WIDTH - 1 downto 0) := (others => '0');
+  signal w_data_3_V_read    : std_logic_vector (DATA_WIDTH - 1 downto 0) := (others => '0');
+  signal w_data_4_V_read    : std_logic_vector (DATA_WIDTH - 1 downto 0) := (others => '0');
+  signal w_data_5_V_read    : std_logic_vector (DATA_WIDTH - 1 downto 0) := (others => '0');
+  signal w_data_6_V_read    : std_logic_vector (DATA_WIDTH - 1 downto 0) := (others => '0');
+  signal w_data_7_V_read    : std_logic_vector (DATA_WIDTH - 1 downto 0) := (others => '0');
+  signal w_data_8_V_read    : std_logic_vector (DATA_WIDTH - 1 downto 0) := (others => '0');
+  signal w_data_9_V_read    : std_logic_vector (DATA_WIDTH - 1 downto 0) := (others => '0');
+  signal w_data_10_V_read   : std_logic_vector (DATA_WIDTH - 1 downto 0) := (others => '0');
+  signal w_data_11_V_read   : std_logic_vector (DATA_WIDTH - 1 downto 0) := (others => '0');
+  signal w_data_12_V_read   : std_logic_vector (DATA_WIDTH - 1 downto 0) := (others => '0');
+  signal w_data_13_V_read   : std_logic_vector (DATA_WIDTH - 1 downto 0) := (others => '0');
+  signal w_data_14_V_read   : std_logic_vector (DATA_WIDTH - 1 downto 0) := (others => '0');
+  signal w_data_15_V_read   : std_logic_vector (DATA_WIDTH - 1 downto 0) := (others => '0');
+  signal w_weight_0_V_read  : std_logic_vector (DATA_WIDTH - 1 downto 0) := (others => '0');
+  signal w_weight_1_V_read  : std_logic_vector (DATA_WIDTH - 1 downto 0) := (others => '0');
+  signal w_weight_2_V_read  : std_logic_vector (DATA_WIDTH - 1 downto 0) := (others => '0');
+  signal w_weight_3_V_read  : std_logic_vector (DATA_WIDTH - 1 downto 0) := (others => '0');
+  signal w_weight_4_V_read  : std_logic_vector (DATA_WIDTH - 1 downto 0) := (others => '0');
+  signal w_weight_5_V_read  : std_logic_vector (DATA_WIDTH - 1 downto 0) := (others => '0');
+  signal w_weight_6_V_read  : std_logic_vector (DATA_WIDTH - 1 downto 0) := (others => '0');
+  signal w_weight_7_V_read  : std_logic_vector (DATA_WIDTH - 1 downto 0) := (others => '0');
+  signal w_weight_8_V_read  : std_logic_vector (DATA_WIDTH - 1 downto 0) := (others => '0');
+  signal w_weight_9_V_read  : std_logic_vector (DATA_WIDTH - 1 downto 0) := (others => '0');
+  signal w_weight_10_V_read : std_logic_vector (DATA_WIDTH - 1 downto 0) := (others => '0');
+  signal w_weight_11_V_read : std_logic_vector (DATA_WIDTH - 1 downto 0) := (others => '0');
+  signal w_weight_12_V_read : std_logic_vector (DATA_WIDTH - 1 downto 0) := (others => '0');
+  signal w_weight_13_V_read : std_logic_vector (DATA_WIDTH - 1 downto 0) := (others => '0');
+  signal w_weight_14_V_read : std_logic_vector (DATA_WIDTH - 1 downto 0) := (others => '0');
+  signal w_weight_15_V_read : std_logic_vector (DATA_WIDTH - 1 downto 0) := (others => '0');
+  signal w_ap_return_my     : std_logic_vector (DATA_WIDTH - 1 downto 0) := (others => '0');
+  signal w_ap_return_their  : std_logic_vector (DATA_WIDTH - 1 downto 0) := (others => '0');
 
   component my_dense is
     generic
@@ -249,6 +249,15 @@ begin
   ap_return        => w_ap_return_their
   );
   -------------------------
+  p_CLK : process
+  begin
+    w_ap_clk <= '1';
+    wait for c_clk_period/2;
+    w_ap_clk <= '0';
+    wait for c_clk_period/2;
+  end process p_CLK;
+  -------------------------
+
   p_TEST : process
   begin
 
@@ -259,8 +268,6 @@ begin
     w_ap_start <= '0';
 
     wait until (w_ap_ready_my = '1' and w_ap_ready_their = '1');
-    
-
     -- TEST DONE
     assert false report "Test done." severity note;
     wait;
