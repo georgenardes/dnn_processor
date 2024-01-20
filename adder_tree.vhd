@@ -37,10 +37,10 @@ architecture arch of adder_tree is
 
 begin
 
-  -- gen_input :
-  -- for i in 0 to NUM_OF_OPERANDS - 1 generate
-  --   w_AUX(i, TREE_DEPTH)(DATA_WIDTH - 1 downto 0) <= i_input_vector(i);
-  -- end generate gen_input;
+  gen_input :
+  for i in 0 to NUM_OF_OPERANDS - 1 generate
+    w_AUX(i, TREE_DEPTH)(DATA_WIDTH - 1 downto 0) <= i_input_vector(i);
+  end generate gen_input;
 
   cols :
   for i in TREE_DEPTH downto 1 generate
