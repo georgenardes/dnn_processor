@@ -48,6 +48,7 @@ architecture arch of dnu_wrapper is
     );
     port
     (
+      i_clk          : in std_logic;
       i_input_vector : in t_ARRAY_OF_LOGIC_VECTOR(0 to NUM_OF_OPERANDS - 1)(DATA_WIDTH - 1 downto 0);
       o_sum          : out std_logic_vector(DATA_WIDTH + TREE_DEPTH - 1 downto 0)
     );
@@ -80,6 +81,7 @@ begin
   )
   port
   map (
+  i_clk          => i_clk,
   i_input_vector => w_mult_out,
   o_sum          => w_addr_tree_out
   );
