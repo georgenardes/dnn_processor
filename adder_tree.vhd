@@ -14,6 +14,7 @@ entity adder_tree is
   );
   port
   (
+    i_CLK          : in std_logic;
     i_input_vector : in t_ARRAY_OF_LOGIC_VECTOR(0 to NUM_OF_OPERANDS - 1)(DATA_WIDTH - 1 downto 0); -- Input operands
     o_sum          : out std_logic_vector(DATA_WIDTH + TREE_DEPTH - 1 downto 0) -- Output sum
   );
@@ -35,13 +36,40 @@ architecture arch of adder_tree is
     );
   end component;
 
+  component gen_register
+    generic
+    (
+      DATA_WIDTH : integer
+    );
+    port
+    (
+      i_clk   : in std_logic;
+      i_clear : in std_logic;
+      i_load  : in std_logic;
+      i_data  : in std_logic_vector(DATA_WIDTH - 1 downto 0);
+      o_q     : out std_logic_vector(DATA_WIDTH - 1 downto 0)
+    );
+  end component;
+
 begin
 
   gen_input :
   for i in 0 to NUM_OF_OPERANDS - 1 generate
-    w_AUX(i, TREE_DEPTH)(DATA_WIDTH - 1 downto 0) <= i_input_vector(i);
-  end generate gen_input;
+    gen_register_inst : gen_register
+    generic
+    map (
+    DATA_WIDTH => DATA_WIDTH
+    )
+    port map
+    (
+      i_clk   => i_CLK,
+      i_clear => '0',
+      i_load  => '1',
+      i_data  => i_input_vector(i),
+      o_q     => w_AUX(i, TREE_DEPTH)(DATA_WIDTH - 1 downto 0)
+    );
 
+  end generate gen_input;
   cols :
   for i in TREE_DEPTH downto 1 generate
   begin
@@ -53,11 +81,12 @@ begin
       map (
       WIDTH => DATA_WIDTH + TREE_DEPTH - i
       )
-      port map
+      port
+      map
       (
-        i_a   => w_AUX(j * 2, i)(DATA_WIDTH + TREE_DEPTH - i - 1 downto 0),
-        i_b   => w_AUX(j * 2 + 1, i)(DATA_WIDTH + TREE_DEPTH - i - 1 downto 0),
-        o_sum => w_AUX(j, i - 1)(DATA_WIDTH + TREE_DEPTH - i downto 0)
+      i_a   => w_AUX(j * 2, i)(DATA_WIDTH + TREE_DEPTH - i - 1 downto 0),
+      i_b   => w_AUX(j * 2 + 1, i)(DATA_WIDTH + TREE_DEPTH - i - 1 downto 0),
+      o_sum => w_AUX(j, i - 1)(DATA_WIDTH + TREE_DEPTH - i downto 0)
       );
 
     end generate rows;
