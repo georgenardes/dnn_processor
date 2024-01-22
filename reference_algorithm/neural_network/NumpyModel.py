@@ -1,6 +1,7 @@
 import json
 from Layers import *
 from Activations.ActivationFactory import activation_from_name
+import time
 
 
 class Model:
@@ -10,10 +11,26 @@ class Model:
 
     def __call__(self, inputs, training: bool = False):
         x = inputs
-        for l in self.layers:
-            x = l(x, training)
 
-        return x
+        time_analysis = {"input_shape": list(inputs.shape), "time_per_layer": []}
+        
+        total_elapsed_time = 0
+        for l in self.layers:
+            start_time = time.time()
+            x = l(x, training)
+            end_time = time.time()
+            elapsed_time = end_time - start_time
+            total_elapsed_time += elapsed_time
+            time_analysis["time_per_layer"].append(
+                {
+                    "layer_name": l.name,
+                    "elapsedtime": elapsed_time,
+                }
+            )
+
+        time_analysis["total_elapsed_time"] = total_elapsed_time
+
+        return x, time_analysis
 
     def load_model(self, model_path):
         """
