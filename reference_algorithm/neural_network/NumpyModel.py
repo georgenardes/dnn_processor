@@ -12,8 +12,8 @@ class Model:
     def __call__(self, inputs, training: bool = False):
         x = inputs
 
-        time_analysis = {"input_shape": list(inputs.shape), "time_per_layer": []}
-        
+        time_analysis = {"input_shape": list(inputs.shape), "time_per_layer": {}}
+
         total_elapsed_time = 0
         for l in self.layers:
             start_time = time.time()
@@ -21,12 +21,7 @@ class Model:
             end_time = time.time()
             elapsed_time = end_time - start_time
             total_elapsed_time += elapsed_time
-            time_analysis["time_per_layer"].append(
-                {
-                    "layer_name": l.name,
-                    "elapsedtime": elapsed_time,
-                }
-            )
+            time_analysis["time_per_layer"][l.name] = {"elapsedtime": elapsed_time}
 
         time_analysis["total_elapsed_time"] = total_elapsed_time
 
