@@ -31,7 +31,7 @@ def filename_to_label(file_names, class_map_, class_index=-2):
 
 def create_datasets(train_images_rgx, val_images_rgx, batch_size):
     train_images_path = list_images(train_images_rgx, shuffle=True)
-    val_images_path = list_images(val_images_rgx, shuffle=True)    
+    val_images_path = list_images(val_images_rgx, shuffle=True)
 
     train_labels = filename_to_label(train_images_path, CLASS_MAP)
     val_labels = filename_to_label(val_images_path, CLASS_MAP)
@@ -42,6 +42,9 @@ def create_datasets(train_images_rgx, val_images_rgx, batch_size):
         oh_depth=tf.constant([5] * len(train_labels)),
         batch_size=batch_size,
     )
+
+    val_batch_size = len(val_images_path)
+    val_batch_size = val_batch_size if val_batch_size < batch_size else batch_size
 
     val_dataset = dgu.classifier_data_generator(
         val_images_path,
