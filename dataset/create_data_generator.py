@@ -54,7 +54,4 @@ def create_datasets(train_images_rgx, val_images_rgx, batch_size):
         drop_remainder=False,
     )
 
-    print("Train Dataset:", train_dataset)
-    print("Val Dataset:", val_dataset)
-
     return train_dataset, val_dataset, len(CLASS_MAP.values())
