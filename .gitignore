@@ -77,3 +77,7 @@ modelsim.ini
 *.zip
 
 *__pycache__*
+
+*hls4ml_prj*
+*/hls4ml_prj/*
+
