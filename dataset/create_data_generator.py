@@ -31,7 +31,7 @@ def filename_to_label(file_names, class_map_, class_index=-2):
 
 def create_datasets(train_images_rgx, val_images_rgx, batch_size):
     train_images_path = list_images(train_images_rgx, shuffle=True)
-    val_images_path = list_images(val_images_rgx, shuffle=True)
+    val_images_path = list_images(val_images_rgx, shuffle=False)
 
     assert len(train_images_path) > 0, "0 images found."
     assert len(val_images_path) > 0, "0 images found."

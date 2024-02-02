@@ -7981,14 +7981,14 @@
             ]
         }
     },
-    {
+    {dense_num_params
         "trial_id": "169",
         "train_loss": 0.15063489973545074,
         "train_accuracy": 0.956250011920929,
         "val_loss": 0.24024812877178192,
         "val_accuracy": 0.9599999785423279,
         "num_params": 29113.0,
-        "dense_num_params": 20255.0,
+        "dense_num_paramsdense_num_params": 20255.0,
         "model_config": {
             "name": "model_169",
             "trainable": true,
