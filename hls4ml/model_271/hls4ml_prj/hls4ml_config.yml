@@ -4,93 +4,93 @@ HLSConfig:
   LayerName:
     activation_759:
       Precision:
-        result: fixed<16,6>
+        result: fixed<4,4>
       Strategy: Resource
       Trace: false
     activation_760:
       Precision:
-        result: fixed<16,6>
+        result: fixed<4,4>
       Strategy: Resource
       Trace: false
     activation_761:
       Precision:
-        result: fixed<16,6>
+        result: fixed<4,4>
       Strategy: Resource
       Trace: false
     conv2d_810:
       Precision:
-        bias: fixed<16,6>
-        result: fixed<16,6>
-        weight: fixed<16,6>
+        bias: fixed<4,4>
+        result: fixed<4,4>
+        weight: fixed<4,4>
       Strategy: Resource
       Trace: false
     conv2d_810_linear:
       Precision:
-        result: fixed<16,6>
+        result: fixed<4,4>
       Strategy: Resource
       Trace: false
     conv2d_811:
       Precision:
-        bias: fixed<16,6>
-        result: fixed<16,6>
-        weight: fixed<16,6>
+        bias: fixed<4,4>
+        result: fixed<4,4>
+        weight: fixed<4,4>
       Strategy: Resource
       Trace: false
     conv2d_811_linear:
       Precision:
-        result: fixed<16,6>
+        result: fixed<4,4>
       Strategy: Resource
       Trace: false
     dense_271:
       Precision:
-        bias: fixed<16,6>
-        result: fixed<16,6>
-        weight: fixed<16,6>
+        bias: fixed<4,4>
+        result: fixed<4,4>
+        weight: fixed<4,4>
       ReuseFactor: 4000
       Strategy: Resource
       Trace: false
     dense_271_linear:
       Precision:
-        result: fixed<16,6>
+        result: fixed<4,4>
       Strategy: Resource
       Trace: false
     depthwise_conv2d_220:
       Precision:
-        bias: fixed<16,6>
-        result: fixed<16,6>
-        weight: fixed<16,6>
+        bias: fixed<4,4>
+        result: fixed<4,4>
+        weight: fixed<4,4>
       Strategy: Latency
       Trace: false
     depthwise_conv2d_220_linear:
       Precision:
-        result: fixed<16,6>
+        result: fixed<4,4>
       Strategy: Resource
       Trace: false
     depthwise_conv2d_221:
       Precision:
-        bias: fixed<16,6>
-        result: fixed<16,6>
-        weight: fixed<16,6>
+        bias: fixed<4,4>
+        result: fixed<4,4>
+        weight: fixed<4,4>
       Strategy: Latency
       Trace: false
     depthwise_conv2d_221_linear:
       Precision:
-        result: fixed<16,6>
+        result: fixed<4,4>
       Strategy: Resource
       Trace: false
     flatten_271:
       Precision:
-        result: fixed<16,6>
+        result: fixed<4,4>
       Strategy: Resource
       Trace: false
     input_1:
       Precision:
-        result: fixed<16,6>
+        result: fixed<4,4>
       Strategy: Resource
       Trace: false
   Model:
     BramFactor: 1000000000
-    Precision: fixed<16,6>
+    Precision: fixed<4,4>
     ReuseFactor: 2048
     Strategy: Resource
     TraceOutput: false
@@ -101,5 +101,5 @@ OutputDir: model_271/hls4ml_prj
 OutputPredictions: null
 Part: xc7z020-clg400-1
 ProjectName: myproject
-Stamp: 7f8Ca7A0
+Stamp: 9D24De2c
 Version: 1.0.0

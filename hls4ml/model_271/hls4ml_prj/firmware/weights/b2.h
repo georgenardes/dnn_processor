@@ -9,7 +9,7 @@
 #ifndef __SYNTHESIS__
 depthwise_conv2d_220_bias_t b2[3];
 #else
-depthwise_conv2d_220_bias_t b2[3] = {0.1133429632, 0.1401842684, -0.0532999150};
+depthwise_conv2d_220_bias_t b2[3] = {0, 0, -0};
 #endif
 
 #endif
