@@ -81,4 +81,4 @@ modelsim.ini
 *hls4ml_prj*
 */hls4ml_prj/*
 
-saved_models/*
+neural_network/automl/saved_models/exp7_no_depth_w_GAP_multiObj/*
