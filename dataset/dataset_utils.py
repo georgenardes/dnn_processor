@@ -13,13 +13,14 @@ def read_image(image_path):
 
 def load_data_for_autoencoder(image_list):
     image = read_image(image_list)
-    image = tf.cast(image, tf.float16) / 256
+    image = tf.cast(image, tf.float32) / 256
     return image, image
 
 
-def load_data_for_classifier(image_list, label_list, oh_depth):
+def load_data_for_classifier(image_list, label_list, oh_depth, image_size):
     image = read_image(image_list)
-    image = tf.cast(image, tf.float16) / 256
+    image = tf.cast(image, tf.float32) / 256
+    image = tf.image.resize(image, [image_size, image_size])
     label = tf.one_hot(label_list, oh_depth, 1.0, 0.0)
     label.set_shape([5])
     return image, label
@@ -38,11 +39,14 @@ def autoencoder_data_generator(image_list, batch_size, drop_remainder=True):
 
 
 def classifier_data_generator(
-    image_list, labels_list, oh_depth, batch_size, drop_remainder=True
+    image_list, labels_list, oh_depth, batch_size, image_size, drop_remainder=True
 ):
-    dataset = tf.data.Dataset.from_tensor_slices((image_list, labels_list, oh_depth))
+    dataset = tf.data.Dataset.from_tensor_slices((image_list, labels_list))
     dataset = dataset.shuffle(2048)
-    dataset = dataset.map(load_data_for_classifier, num_parallel_calls=tf.data.AUTOTUNE)
+    dataset = dataset.map(
+        lambda x, y: load_data_for_classifier(x, y, oh_depth, image_size),
+        num_parallel_calls=tf.data.AUTOTUNE,
+    )
     dataset = dataset.batch(
         batch_size, drop_remainder=drop_remainder, num_parallel_calls=tf.data.AUTOTUNE
     )
