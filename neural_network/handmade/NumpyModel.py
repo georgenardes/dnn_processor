@@ -16,8 +16,10 @@ class Model:
 
         total_elapsed_time = 0
         for l in self.layers:
+            print(l.name)
+            print(x.shape)
             start_time = time.time()
-            x = l(x, training)
+            x = l(x, training)            
             end_time = time.time()
             elapsed_time = end_time - start_time
             total_elapsed_time += elapsed_time
@@ -69,6 +71,10 @@ class Model:
                     model_path + layerConfig["weightPath"],
                     model_path + layerConfig["biasPath"],
                 )
+                layer.activation = activation_from_name(layerConfig["activation"])
+
+            elif layerConfig["layerType"] == "Activation":
+                layer = ActivationLayer(layerConfig["layerName"])
                 layer.activation = activation_from_name(layerConfig["activation"])
 
             elif layerConfig["layerType"] == "Flatten":

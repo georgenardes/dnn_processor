@@ -1,5 +1,6 @@
 from Activations.Softmax import Softmax
 from Activations.Tanh import Tanh
+from Activations.Relu import Relu
 
 
 def activation_from_name(activation_name):
@@ -9,6 +10,8 @@ def activation_from_name(activation_name):
         activation = Tanh()
     elif activation_name.lower() == "softmax":
         activation = Softmax()
+    elif activation_name.lower() == "relu":
+        activation = Relu()
     elif activation_name.lower() == "linear":
         activation = None
 
