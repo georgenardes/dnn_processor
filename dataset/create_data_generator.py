@@ -60,3 +60,37 @@ def create_datasets(train_images_rgx, val_images_rgx, batch_size, image_size):
     )
 
     return train_dataset, val_dataset, len(CLASS_MAP.values())
+
+
+def create_train_val_datasets(images_rgx, batch_size, image_size, ratio=0.1):
+    images_path = list_images(images_rgx, shuffle=True)
+    train_images_path = images_path[0 : int(len(images_path) * ratio)]
+    val_images_path = images_path[int(len(images_path) * ratio) :]
+
+    assert len(train_images_path) > 0, "0 images found."
+    assert len(val_images_path) > 0, "0 images found."
+
+    train_labels = filename_to_label(train_images_path, CLASS_MAP)
+    val_labels = filename_to_label(val_images_path, CLASS_MAP)
+
+    train_dataset = dgu.classifier_data_generator(
+        train_images_path,
+        train_labels,
+        oh_depth=5,  # tf.constant([5] * len(train_labels)), use this when tf==2.10
+        batch_size=batch_size,
+        image_size=image_size,
+    )
+
+    val_batch_size = len(val_images_path)
+    val_batch_size = val_batch_size if val_batch_size < batch_size else batch_size
+
+    val_dataset = dgu.classifier_data_generator(
+        val_images_path,
+        val_labels,
+        oh_depth=5,  # tf.constant([5] * len(val_labels)),
+        batch_size=batch_size,
+        image_size=image_size,
+        drop_remainder=False,
+    )
+
+    return train_dataset, val_dataset, len(CLASS_MAP.values())
