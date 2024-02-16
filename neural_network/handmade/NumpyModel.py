@@ -15,9 +15,7 @@ class Model:
         time_analysis = {"input_shape": list(inputs.shape), "time_per_layer": {}}
 
         total_elapsed_time = 0
-        for l in self.layers:
-            print(l.name)
-            print(x.shape)
+        for l in self.layers:            
             start_time = time.time()
             x = l(x, training)            
             end_time = time.time()
