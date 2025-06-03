@@ -51,3 +51,19 @@ def classifier_data_generator(
         batch_size, drop_remainder=drop_remainder, num_parallel_calls=tf.data.AUTOTUNE
     )
     return dataset
+
+
+def classifier_data_generator_from_ndarray(
+    images_ndarray, labels_ndarray, batch_size, drop_remainder=True
+):
+    dataset = tf.data.Dataset.from_tensor_slices((images_ndarray, labels_ndarray))
+    dataset = dataset.shuffle(2048)
+
+    dataset = dataset.batch(
+        batch_size, drop_remainder=drop_remainder, num_parallel_calls=tf.data.AUTOTUNE
+    )
+
+    num_classes = len(labels_ndarray[0])
+    dataset.__setattr__("num_classes", num_classes)
+
+    return dataset

@@ -1,7 +1,9 @@
-import tensorflow as tf
-import dataset.dataset_utils as dgu
+from typing import Tuple
 from glob import glob
 import random
+import numpy as np
+
+import dataset.dataset_utils as dgu
 
 
 CLASS_MAP = {
@@ -27,6 +29,34 @@ def filename_to_label(file_names, class_map_, class_index=-2):
     for file_name in file_names:
         labels.append(class_map_[file_name.split("/")[class_index]])
     return labels
+
+
+def create_train_dataset(npy_fpaths: Tuple[str, str], batch_size: int):
+    x_npy = np.load(npy_fpaths[0])
+    y_npy = np.load(npy_fpaths[1])
+
+    ds = dgu.classifier_data_generator_from_ndarray(
+        images_ndarray=x_npy,
+        labels_ndarray=y_npy,
+        batch_size=batch_size,
+        drop_remainder=True,
+    )
+
+    return ds
+
+
+def create_test_dataset(npy_fpaths: Tuple[str, str], batch_size: int):
+    x_npy = np.load(npy_fpaths[0])
+    y_npy = np.load(npy_fpaths[1])
+
+    ds = dgu.classifier_data_generator_from_ndarray(
+        images_ndarray=x_npy,
+        labels_ndarray=y_npy,
+        batch_size=batch_size,
+        drop_remainder=False,
+    )
+
+    return ds
 
 
 def create_datasets(train_images_rgx, val_images_rgx, batch_size, image_size):
